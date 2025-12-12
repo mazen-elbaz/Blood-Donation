@@ -1,0 +1,55 @@
+@model IEnumerable<BloodDonationTracker.Models.Donor>
+@{
+    ViewData["Title"] = "Donors";
+}
+
+<div class="container my-4">
+    <div class="row">
+        <div class="col-12">
+            <h1><i class="fas fa-user-md text-primary"></i> All Donors</h1>
+        </div>
+    </div>
+
+    <div class="card">
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-hover">
+                    <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>Email</th>
+                            <th>City</th>
+                            <th>Blood Type</th>
+                            <th>Status</th>
+                            <th>Last Donation</th>
+                            <th>Total Donations</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var donor in Model)
+                        {
+                            <tr>
+                                <td>
+                                    <strong>@donor.User.FullName</strong>
+                                </td>
+                                <td>@donor.User.Email</td>
+                                <td>@donor.User.City</td>
+                                <td><span class="badge bg-primary">@donor.BloodType</span></td>
+                                <td>
+                                    <span class="badge @(donor.IsAvailable ? "bg-success" : "bg-warning")">
+                                        @(donor.IsAvailable ? "Available" : "Unavailable")
+                                    </span>
+                                </td>
+                                <td>@donor.LastDonationDate.ToString("MMM dd, yyyy")</td>
+                                <td>
+                                    <span class="badge bg-info">@donor.Donations.Count</span>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+

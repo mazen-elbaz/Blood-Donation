@@ -1,0 +1,113 @@
+@{
+    ViewData["Title"] = "Home";
+}
+
+<div class="hero-section">
+    <div class="container">
+        <div class="row align-items-center">
+            <div class="col-lg-6">
+                <h1 class="display-4 fw-bold mb-4">Save Lives Through Blood Donation</h1>
+                <p class="lead mb-4">Connect with hospitals and donors to make a difference in your community. Every donation counts!</p>
+                <div class="d-flex gap-3">
+                    @if (ViewBag.IsAuthenticated)
+                    {
+                        <div class="alert alert-info">
+                            <i class="fas fa-user"></i> Welcome back, @ViewBag.CurrentUser?.FirstName!
+                            <br>
+                            <small>You are logged in as: @ViewBag.CurrentUser?.Email</small>
+                        </div>
+                    }
+                    else
+                    {
+                        <a href="@Url.Action("Register", "Account")" class="btn btn-light btn-lg">
+                            <i class="fas fa-user-plus"></i> Get Started
+                        </a>
+                        <a href="@Url.Action("Login", "Account")" class="btn btn-outline-light btn-lg">
+                            <i class="fas fa-sign-in-alt"></i> Login
+                        </a>
+                    }
+                </div>
+            </div>
+            <div class="col-lg-6 text-center">
+                <i class="fas fa-heart fa-10x opacity-75"></i>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="container my-5">
+    <div class="row">
+        <div class="col-lg-3 col-md-6 mb-4">
+            <div class="card stats-card h-100">
+                <div class="card-body text-center">
+                    <i class="fas fa-users fa-3x mb-3"></i>
+                    <h3 class="card-title">@ViewBag.Stats.TotalDonors</h3>
+                    <p class="card-text">Active Donors</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-3 col-md-6 mb-4">
+            <div class="card stats-card h-100">
+                <div class="card-body text-center">
+                    <i class="fas fa-hospital fa-3x mb-3"></i>
+                    <h3 class="card-title">@ViewBag.Stats.TotalHospitals</h3>
+                    <p class="card-text">Partner Hospitals</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-3 col-md-6 mb-4">
+            <div class="card stats-card h-100">
+                <div class="card-body text-center">
+                    <i class="fas fa-exclamation-triangle fa-3x mb-3"></i>
+                    <h3 class="card-title">@ViewBag.Stats.OpenRequests</h3>
+                    <p class="card-text">Open Requests</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-3 col-md-6 mb-4">
+            <div class="card stats-card h-100">
+                <div class="card-body text-center">
+                    <i class="fas fa-check-circle fa-3x mb-3"></i>
+                    <h3 class="card-title">@ViewBag.Stats.CompletedDonations</h3>
+                    <p class="card-text">Completed Donations</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="container my-5">
+    <div class="row">
+        <div class="col-lg-4 mb-4">
+            <div class="card h-100">
+                <div class="card-body text-center">
+                    <i class="fas fa-user-md fa-3x text-primary mb-3"></i>
+                    <h4 class="card-title">For Donors</h4>
+                    <p class="card-text">Register as a donor, view blood requests in your area, and help save lives by donating blood when needed.</p>
+                    <a href="@Url.Action("Register", "Account")" class="btn btn-primary">Become a Donor</a>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-4 mb-4">
+            <div class="card h-100">
+                <div class="card-body text-center">
+                    <i class="fas fa-hospital fa-3x text-success mb-3"></i>
+                    <h4 class="card-title">For Hospitals</h4>
+                    <p class="card-text">Post blood requests, manage donations, and connect with donors to ensure you have the blood supply you need.</p>
+                    <a href="@Url.Action("Register", "Account")" class="btn btn-success">Hospital Registration</a>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-4 mb-4">
+            <div class="card h-100">
+                <div class="card-body text-center">
+                    <i class="fas fa-cogs fa-3x text-warning mb-3"></i>
+                    <h4 class="card-title">For Administrators</h4>
+                    <p class="card-text">Manage the entire system, monitor donations, and ensure smooth operations across all users.</p>
+                    <a href="@Url.Action("Login", "Account")" class="btn btn-warning">Admin Login</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+

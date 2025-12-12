@@ -1,0 +1,89 @@
+@model IEnumerable<BloodDonationTracker.Models.BloodRequest>
+@{
+    ViewData["Title"] = "Blood Requests";
+}
+
+<div class="container my-4">
+    <div class="row">
+        <div class="col-12">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <h1><i class="fas fa-search text-primary"></i> Available Blood Requests</h1>
+                <a href="@Url.Action("Index", "Donor")" class="btn btn-secondary">
+                    <i class="fas fa-arrow-left"></i> Back to Dashboard
+                </a>
+            </div>
+        </div>
+    </div>
+
+    @if (Model != null && Model.Any())
+    {
+        <div class="row">
+            @foreach (var request in Model)
+            {
+                <div class="col-md-6 col-lg-4 mb-4">
+                    <div class="card h-100">
+                        <div class="card-header d-flex justify-content-between align-items-center">
+                            <h6 class="mb-0">
+                                <i class="fas fa-hospital text-primary"></i>
+                                @request.Hospital.User.FullName
+                            </h6>
+                            <span class="badge @(request.Urgency == "Critical" ? "bg-danger" : request.Urgency == "High" ? "bg-warning" : "bg-info")">
+                                @request.Urgency
+                            </span>
+                        </div>
+                        <div class="card-body">
+                            <div class="mb-3">
+                                <h5 class="card-title">
+                                    <span class="badge bg-primary">@request.BloodType</span>
+                                    Blood Request
+                                </h5>
+                                <p class="card-text">@request.Description</p>
+                            </div>
+                            
+                            <div class="row text-center mb-3">
+                                <div class="col-6">
+                                    <div class="text-muted small">Quantity Needed</div>
+                                    <div class="fw-bold">@request.Quantity units</div>
+                                </div>
+                                <div class="col-6">
+                                    <div class="text-muted small">Request Date</div>
+                                    <div class="fw-bold">@request.RequestDate.ToString("MMM dd")</div>
+                                </div>
+                            </div>
+
+                            <div class="mb-3">
+                                <div class="text-muted small">Hospital Location</div>
+                                <div class="fw-bold">@request.Hospital.Address</div>
+                            </div>
+
+                            <div class="mb-3">
+                                <div class="text-muted small">Contact</div>
+                                <div class="fw-bold">@request.Hospital.PhoneNumber</div>
+                            </div>
+                        </div>
+                        <div class="card-footer">
+                            <form asp-action="AcceptRequest" method="post" class="d-inline">
+                                <input type="hidden" name="requestId" value="@request.Id">
+                                <button type="submit" class="btn btn-success w-100">
+                                    <i class="fas fa-handshake"></i> Accept Request
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    }
+    else
+    {
+        <div class="text-center py-5">
+            <i class="fas fa-inbox fa-4x text-muted mb-4"></i>
+            <h3 class="text-muted">No Blood Requests Available</h3>
+            <p class="text-muted">There are currently no blood requests matching your blood type.</p>
+            <a href="@Url.Action("Index", "Donor")" class="btn btn-primary">
+                <i class="fas fa-arrow-left"></i> Back to Dashboard
+            </a>
+        </div>
+    }
+</div>
+

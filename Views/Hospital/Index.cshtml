@@ -1,0 +1,143 @@
+@model BloodDonationTracker.Models.Hospital
+@{
+    ViewData["Title"] = "Hospital Dashboard";
+}
+
+<div class="container my-4">
+    <div class="row">
+        <div class="col-12">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <h1><i class="fas fa-hospital text-primary"></i> Hospital Dashboard</h1>
+                <div>
+                    <a href="@Url.Action("CreateRequest", "Hospital")" class="btn btn-primary">
+                        <i class="fas fa-plus"></i> Create Blood Request
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row mb-4">
+        <div class="col-md-3">
+            <div class="card text-center">
+                <div class="card-body">
+                    <i class="fas fa-exclamation-triangle fa-2x text-warning mb-2"></i>
+                    <h5 class="card-title">Open Requests</h5>
+                    <h3 class="text-warning">@ViewBag.OpenRequests</h3>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card text-center">
+                <div class="card-body">
+                    <i class="fas fa-check-circle fa-2x text-success mb-2"></i>
+                    <h5 class="card-title">Fulfilled</h5>
+                    <h3 class="text-success">@ViewBag.FulfilledRequests</h3>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card text-center">
+                <div class="card-body">
+                    <i class="fas fa-hospital fa-2x text-primary mb-2"></i>
+                    <h5 class="card-title">Hospital</h5>
+                    <h6 class="text-muted">@ViewBag.Hospital.HospitalName</h6>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card text-center">
+                <div class="card-body">
+                    <i class="fas fa-map-marker-alt fa-2x text-info mb-2"></i>
+                    <h5 class="card-title">Location</h5>
+                    <h6 class="text-muted">@ViewBag.Hospital.User.City</h6>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-8">
+            <div class="card">
+                <div class="card-header">
+                    <h5><i class="fas fa-list"></i> Recent Blood Requests</h5>
+                </div>
+                <div class="card-body">
+                    @if (ViewBag.RecentRequests != null && ViewBag.RecentRequests.Count > 0)
+                    {
+                        <div class="table-responsive">
+                            <table class="table table-hover">
+                                <thead>
+                                    <tr>
+                                        <th>Blood Type</th>
+                                        <th>Quantity</th>
+                                        <th>Urgency</th>
+                                        <th>Status</th>
+                                        <th>Date</th>
+                                        <th>Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var request in ViewBag.RecentRequests)
+                                    {
+                                        <tr>
+                                            <td><span class="badge bg-primary">@request.BloodType</span></td>
+                                            <td>@request.Quantity units</td>
+                                            <td>
+                                                <span class="badge @(request.Urgency == "Critical" ? "bg-danger" : request.Urgency == "High" ? "bg-warning" : "bg-info")">
+                                                    @request.Urgency
+                                                </span>
+                                            </td>
+                                            <td>
+                                                <span class="badge @(request.Status == "Open" ? "bg-warning" : request.Status == "Fulfilled" ? "bg-success" : "bg-danger")">
+                                                    @request.Status
+                                                </span>
+                                            </td>
+                                            <td>@request.RequestDate.ToString("MMM dd, yyyy")</td>
+                                            <td>
+                                                <a href="@Url.Action("RequestDetails", "Hospital", new { id = request.Id })" class="btn btn-sm btn-outline-primary">
+                                                    <i class="fas fa-eye"></i> View
+                                                </a>
+                                            </td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                    }
+                    else
+                    {
+                        <div class="text-center py-4">
+                            <i class="fas fa-inbox fa-3x text-muted mb-3"></i>
+                            <p class="text-muted">No blood requests yet. Create your first request!</p>
+                            <a href="@Url.Action("CreateRequest", "Hospital")" class="btn btn-primary">
+                                <i class="fas fa-plus"></i> Create Request
+                            </a>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card">
+                <div class="card-header">
+                    <h5><i class="fas fa-cog"></i> Quick Actions</h5>
+                </div>
+                <div class="card-body">
+                    <div class="d-grid gap-2">
+                        <a href="@Url.Action("CreateRequest", "Hospital")" class="btn btn-primary">
+                            <i class="fas fa-plus"></i> Create Blood Request
+                        </a>
+                        <a href="@Url.Action("MyRequests", "Hospital")" class="btn btn-outline-primary">
+                            <i class="fas fa-list"></i> My Requests
+                        </a>
+                        <a href="@Url.Action("Profile", "Hospital")" class="btn btn-outline-secondary">
+                            <i class="fas fa-user-edit"></i> Update Profile
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+

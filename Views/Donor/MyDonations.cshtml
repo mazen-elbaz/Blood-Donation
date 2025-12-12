@@ -1,0 +1,85 @@
+@model IEnumerable<BloodDonationTracker.Models.Donation>
+@{
+    ViewData["Title"] = "My Donations";
+}
+
+<div class="container my-4">
+    <div class="row">
+        <div class="col-12">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <h1><i class="fas fa-history text-primary"></i> My Donations</h1>
+                <a href="@Url.Action("Index", "Donor")" class="btn btn-secondary">
+                    <i class="fas fa-arrow-left"></i> Back to Dashboard
+                </a>
+            </div>
+        </div>
+    </div>
+
+    @if (Model != null && Model.Any())
+    {
+        <div class="card">
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table table-hover">
+                        <thead>
+                            <tr>
+                                <th>Hospital</th>
+                                <th>Blood Type</th>
+                                <th>Quantity</th>
+                                <th>Donation Date</th>
+                                <th>Status</th>
+                                <th>Notes</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var donation in Model)
+                            {
+                                <tr>
+                                    <td>
+                                        <div>
+                                            <strong>@donation.BloodRequest.Hospital.User.FullName</strong>
+                                            <br>
+                                            <small class="text-muted">@donation.BloodRequest.Hospital.HospitalName</small>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <span class="badge bg-primary">@donation.BloodRequest.BloodType</span>
+                                    </td>
+                                    <td>@donation.Quantity unit(s)</td>
+                                    <td>@donation.DonationDate.ToString("MMM dd, yyyy")</td>
+                                    <td>
+                                        <span class="badge @(donation.Status == "Completed" ? "bg-success" : donation.Status == "Pending" ? "bg-warning" : "bg-danger")">
+                                            @donation.Status
+                                        </span>
+                                    </td>
+                                    <td>
+                                        @if (!string.IsNullOrEmpty(donation.Notes))
+                                        {
+                                            <span class="text-muted">@donation.Notes</span>
+                                        }
+                                        else
+                                        {
+                                            <span class="text-muted">-</span>
+                                        }
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    }
+    else
+    {
+        <div class="text-center py-5">
+            <i class="fas fa-inbox fa-4x text-muted mb-4"></i>
+            <h3 class="text-muted">No Donations Yet</h3>
+            <p class="text-muted">You haven't made any donations yet. Start by viewing available blood requests!</p>
+            <a href="@Url.Action("ViewRequests", "Donor")" class="btn btn-primary">
+                <i class="fas fa-search"></i> View Blood Requests
+            </a>
+        </div>
+    }
+</div>
+

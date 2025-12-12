@@ -1,0 +1,148 @@
+@{
+    ViewData["Title"] = "Admin Dashboard";
+}
+
+<div class="container my-4">
+    <div class="row">
+        <div class="col-12">
+            <h1><i class="fas fa-cogs text-primary"></i> Admin Dashboard</h1>
+        </div>
+    </div>
+
+    <div class="row mb-4">
+        <div class="col-lg-2 col-md-4 col-sm-6 mb-3">
+            <div class="card text-center">
+                <div class="card-body">
+                    <i class="fas fa-users fa-2x text-primary mb-2"></i>
+                    <h5 class="card-title">Total Users</h5>
+                    <h3 class="text-primary">@ViewBag.Stats.TotalUsers</h3>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-2 col-md-4 col-sm-6 mb-3">
+            <div class="card text-center">
+                <div class="card-body">
+                    <i class="fas fa-user-md fa-2x text-success mb-2"></i>
+                    <h5 class="card-title">Donors</h5>
+                    <h3 class="text-success">@ViewBag.Stats.TotalDonors</h3>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-2 col-md-4 col-sm-6 mb-3">
+            <div class="card text-center">
+                <div class="card-body">
+                    <i class="fas fa-hospital fa-2x text-info mb-2"></i>
+                    <h5 class="card-title">Hospitals</h5>
+                    <h3 class="text-info">@ViewBag.Stats.TotalHospitals</h3>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-2 col-md-4 col-sm-6 mb-3">
+            <div class="card text-center">
+                <div class="card-body">
+                    <i class="fas fa-exclamation-triangle fa-2x text-warning mb-2"></i>
+                    <h5 class="card-title">Open Requests</h5>
+                    <h3 class="text-warning">@ViewBag.Stats.OpenRequests</h3>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-2 col-md-4 col-sm-6 mb-3">
+            <div class="card text-center">
+                <div class="card-body">
+                    <i class="fas fa-check-circle fa-2x text-success mb-2"></i>
+                    <h5 class="card-title">Completed</h5>
+                    <h3 class="text-success">@ViewBag.Stats.CompletedDonations</h3>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-2 col-md-4 col-sm-6 mb-3">
+            <div class="card text-center">
+                <div class="card-body">
+                    <i class="fas fa-list fa-2x text-secondary mb-2"></i>
+                    <h5 class="card-title">Total Requests</h5>
+                    <h3 class="text-secondary">@ViewBag.Stats.TotalRequests</h3>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-8">
+            <div class="card">
+                <div class="card-header">
+                    <h5><i class="fas fa-history"></i> Recent Donations</h5>
+                </div>
+                <div class="card-body">
+                    @if (ViewBag.RecentDonations != null && ViewBag.RecentDonations.Count > 0)
+                    {
+                        <div class="table-responsive">
+                            <table class="table table-hover">
+                                <thead>
+                                    <tr>
+                                        <th>Donor</th>
+                                        <th>Hospital</th>
+                                        <th>Blood Type</th>
+                                        <th>Quantity</th>
+                                        <th>Status</th>
+                                        <th>Date</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var donation in ViewBag.RecentDonations)
+                                    {
+                                        <tr>
+                                            <td>@donation.Donor.User.FullName</td>
+                                            <td>@donation.BloodRequest.Hospital.User.FullName</td>
+                                            <td><span class="badge bg-primary">@donation.BloodRequest.BloodType</span></td>
+                                            <td>@donation.Quantity unit(s)</td>
+                                            <td>
+                                                <span class="badge @(donation.Status == "Completed" ? "bg-success" : donation.Status == "Pending" ? "bg-warning" : "bg-danger")">
+                                                    @donation.Status
+                                                </span>
+                                            </td>
+                                            <td>@donation.CreatedAt.ToString("MMM dd, yyyy")</td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                    }
+                    else
+                    {
+                        <div class="text-center py-4">
+                            <i class="fas fa-inbox fa-3x text-muted mb-3"></i>
+                            <p class="text-muted">No donations yet.</p>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card">
+                <div class="card-header">
+                    <h5><i class="fas fa-cog"></i> Quick Actions</h5>
+                </div>
+                <div class="card-body">
+                    <div class="d-grid gap-2">
+                        <a href="@Url.Action("Users", "Admin")" class="btn btn-outline-primary">
+                            <i class="fas fa-users"></i> Manage Users
+                        </a>
+                        <a href="@Url.Action("Donors", "Admin")" class="btn btn-outline-success">
+                            <i class="fas fa-user-md"></i> View Donors
+                        </a>
+                        <a href="@Url.Action("Hospitals", "Admin")" class="btn btn-outline-info">
+                            <i class="fas fa-hospital"></i> View Hospitals
+                        </a>
+                        <a href="@Url.Action("BloodRequests", "Admin")" class="btn btn-outline-warning">
+                            <i class="fas fa-list"></i> Blood Requests
+                        </a>
+                        <a href="@Url.Action("Donations", "Admin")" class="btn btn-outline-secondary">
+                            <i class="fas fa-handshake"></i> All Donations
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+

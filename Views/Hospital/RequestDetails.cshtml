@@ -1,0 +1,176 @@
+@model BloodDonationTracker.Models.BloodRequest
+@{
+    ViewData["Title"] = "Request Details";
+}
+
+<div class="container my-4">
+    <div class="row">
+        <div class="col-12">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <h1><i class="fas fa-eye text-primary"></i> Blood Request Details</h1>
+                <a href="@Url.Action("MyRequests", "Hospital")" class="btn btn-secondary">
+                    <i class="fas fa-arrow-left"></i> Back to My Requests
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-8">
+            <div class="card">
+                <div class="card-header">
+                    <h5><i class="fas fa-info-circle"></i> Request Information</h5>
+                </div>
+                <div class="card-body">
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                            <strong>Blood Type:</strong>
+                            <span class="badge bg-primary ms-2">@Model.BloodType</span>
+                        </div>
+                        <div class="col-md-6">
+                            <strong>Quantity Needed:</strong>
+                            <span class="ms-2">@Model.Quantity units</span>
+                        </div>
+                    </div>
+
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                            <strong>Urgency Level:</strong>
+                            <span class="badge @(Model.Urgency == "Critical" ? "bg-danger" : Model.Urgency == "High" ? "bg-warning" : "bg-info") ms-2">
+                                @Model.Urgency
+                            </span>
+                        </div>
+                        <div class="col-md-6">
+                            <strong>Status:</strong>
+                            <span class="badge @(Model.Status == "Open" ? "bg-warning" : Model.Status == "Fulfilled" ? "bg-success" : "bg-danger") ms-2">
+                                @Model.Status
+                            </span>
+                        </div>
+                    </div>
+
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                            <strong>Request Date:</strong>
+                            <span class="ms-2">@Model.RequestDate.ToString("MMM dd, yyyy")</span>
+                        </div>
+                        <div class="col-md-6">
+                            <strong>Fulfilled Date:</strong>
+                            <span class="ms-2">
+                                @if (Model.FulfilledDate.HasValue)
+                                {
+                                    @Model.FulfilledDate.Value.ToString("MMM dd, yyyy")
+                                }
+                                else
+                                {
+                                    <span class="text-muted">Not fulfilled yet</span>
+                                }
+                            </span>
+                        </div>
+                    </div>
+
+                    <div class="mb-3">
+                        <strong>Description:</strong>
+                        <p class="mt-2">@Model.Description</p>
+                    </div>
+                </div>
+            </div>
+
+            @if (Model.Donations != null && Model.Donations.Any())
+            {
+                <div class="card mt-4">
+                    <div class="card-header">
+                        <h5><i class="fas fa-handshake"></i> Donation Responses</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table class="table table-hover">
+                                <thead>
+                                    <tr>
+                                        <th>Donor</th>
+                                        <th>Contact</th>
+                                        <th>Quantity</th>
+                                        <th>Donation Date</th>
+                                        <th>Status</th>
+                                        <th>Notes</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var donation in Model.Donations)
+                                    {
+                                        <tr>
+                                            <td>
+                                                <strong>@donation.Donor.User.FullName</strong>
+                                                <br>
+                                                <small class="text-muted">@donation.Donor.User.City</small>
+                                            </td>
+                                            <td>
+                                                <small>@donation.Donor.User.Email</small>
+                                                <br>
+                                                <small>@donation.Donor.User.PhoneNumber</small>
+                                            </td>
+                                            <td>@donation.Quantity unit(s)</td>
+                                            <td>@donation.DonationDate.ToString("MMM dd, yyyy")</td>
+                                            <td>
+                                                <span class="badge @(donation.Status == "Completed" ? "bg-success" : donation.Status == "Pending" ? "bg-warning" : "bg-danger")">
+                                                    @donation.Status
+                                                </span>
+                                            </td>
+                                            <td>
+                                                @if (!string.IsNullOrEmpty(donation.Notes))
+                                                {
+                                                    <small>@donation.Notes</small>
+                                                }
+                                                else
+                                                {
+                                                    <span class="text-muted">-</span>
+                                                }
+                                            </td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            }
+            else
+            {
+                <div class="card mt-4">
+                    <div class="card-body text-center">
+                        <i class="fas fa-inbox fa-3x text-muted mb-3"></i>
+                        <h5 class="text-muted">No Donation Responses Yet</h5>
+                        <p class="text-muted">No donors have responded to this request yet.</p>
+                    </div>
+                </div>
+            }
+        </div>
+        <div class="col-md-4">
+            <div class="card">
+                <div class="card-header">
+                    <h5><i class="fas fa-cog"></i> Actions</h5>
+                </div>
+                <div class="card-body">
+                    @if (Model.Status == "Open")
+                    {
+                        <form asp-action="UpdateRequestStatus" method="post" class="mb-3">
+                            <input type="hidden" name="requestId" value="@Model.Id">
+                            <input type="hidden" name="status" value="Fulfilled">
+                            <button type="submit" class="btn btn-success w-100" onclick="return confirm('Mark this request as fulfilled?')">
+                                <i class="fas fa-check"></i> Mark as Fulfilled
+                            </button>
+                        </form>
+                    }
+                    
+                    <a href="@Url.Action("MyRequests", "Hospital")" class="btn btn-outline-primary w-100 mb-2">
+                        <i class="fas fa-list"></i> All Requests
+                    </a>
+                    
+                    <a href="@Url.Action("CreateRequest", "Hospital")" class="btn btn-outline-success w-100">
+                        <i class="fas fa-plus"></i> Create New Request
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+

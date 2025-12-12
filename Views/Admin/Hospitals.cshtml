@@ -1,0 +1,49 @@
+@model IEnumerable<BloodDonationTracker.Models.Hospital>
+@{
+    ViewData["Title"] = "Hospitals";
+}
+
+<div class="container my-4">
+    <div class="row">
+        <div class="col-12">
+            <h1><i class="fas fa-hospital text-primary"></i> All Hospitals</h1>
+        </div>
+    </div>
+
+    <div class="card">
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-hover">
+                    <thead>
+                        <tr>
+                            <th>Hospital Name</th>
+                            <th>Contact Person</th>
+                            <th>Email</th>
+                            <th>Phone</th>
+                            <th>Address</th>
+                            <th>Total Requests</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var hospital in Model)
+                        {
+                            <tr>
+                                <td>
+                                    <strong>@hospital.HospitalName</strong>
+                                </td>
+                                <td>@hospital.User.FullName</td>
+                                <td>@hospital.User.Email</td>
+                                <td>@hospital.PhoneNumber</td>
+                                <td>@hospital.Address</td>
+                                <td>
+                                    <span class="badge bg-info">@hospital.BloodRequests.Count</span>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+

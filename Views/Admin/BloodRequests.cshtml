@@ -1,0 +1,61 @@
+@model IEnumerable<BloodDonationTracker.Models.BloodRequest>
+@{
+    ViewData["Title"] = "Blood Requests";
+}
+
+<div class="container my-4">
+    <div class="row">
+        <div class="col-12">
+            <h1><i class="fas fa-list text-primary"></i> All Blood Requests</h1>
+        </div>
+    </div>
+
+    <div class="card">
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-hover">
+                    <thead>
+                        <tr>
+                            <th>Hospital</th>
+                            <th>Blood Type</th>
+                            <th>Quantity</th>
+                            <th>Urgency</th>
+                            <th>Status</th>
+                            <th>Request Date</th>
+                            <th>Donations</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var request in Model)
+                        {
+                            <tr>
+                                <td>
+                                    <strong>@request.Hospital.HospitalName</strong>
+                                    <br>
+                                    <small class="text-muted">@request.Hospital.User.FullName</small>
+                                </td>
+                                <td><span class="badge bg-primary">@request.BloodType</span></td>
+                                <td>@request.Quantity units</td>
+                                <td>
+                                    <span class="badge @(request.Urgency == "Critical" ? "bg-danger" : request.Urgency == "High" ? "bg-warning" : "bg-info")">
+                                        @request.Urgency
+                                    </span>
+                                </td>
+                                <td>
+                                    <span class="badge @(request.Status == "Open" ? "bg-warning" : request.Status == "Fulfilled" ? "bg-success" : "bg-danger")">
+                                        @request.Status
+                                    </span>
+                                </td>
+                                <td>@request.RequestDate.ToString("MMM dd, yyyy")</td>
+                                <td>
+                                    <span class="badge bg-info">@request.Donations.Count</span>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
